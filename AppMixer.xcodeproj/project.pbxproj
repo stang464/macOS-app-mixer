@@ -1,0 +1,37 @@
+// !$*UTF8*$!
+{
+archiveVersion = 1;
+classes = {};
+objectVersion = 56;
+objects = {
+000000000000000000000068 = {isa = PBXBuildFile; fileRef = 0000000000000000000000CF; };
+0000000000000000000000CF = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
+000000000000000000000064 = {isa = PBXBuildFile; fileRef = 0000000000000000000000C8; };
+000000000000000000000065 = {isa = PBXBuildFile; fileRef = 0000000000000000000000C9; };
+000000000000000000000066 = {isa = PBXBuildFile; fileRef = 0000000000000000000000CA; };
+000000000000000000000067 = {isa = PBXBuildFile; fileRef = 0000000000000000000000CB; };
+0000000000000000000000C8 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMixerApp.swift; sourceTree = "<group>"; };
+0000000000000000000000C9 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MixerModel.swift; sourceTree = "<group>"; };
+0000000000000000000000CA = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSystem.swift; sourceTree = "<group>"; };
+0000000000000000000000CB = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = AudioKernel.c; sourceTree = "<group>"; };
+0000000000000000000000CC = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioKernel.h; sourceTree = "<group>"; };
+0000000000000000000000CD = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
+0000000000000000000000CE = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+000000000000000000000001 = {isa = PBXProject; attributes = {LastUpgradeCheck = 2700; }; buildConfigurationList = 00000000000000000000000A; compatibilityVersion = "Xcode 14.0"; developmentRegion = en; knownRegions = (en, th, Base); mainGroup = 000000000000000000000002; productRefGroup = 000000000000000000000004; projectDirPath = ""; projectRoot = ""; targets = (000000000000000000000005); };
+000000000000000000000002 = {isa = PBXGroup; children = (000000000000000000000003, 000000000000000000000004); sourceTree = "<group>"; };
+000000000000000000000003 = {isa = PBXGroup; children = (0000000000000000000000CF, 0000000000000000000000C8, 0000000000000000000000C9, 0000000000000000000000CA, 0000000000000000000000CB, 0000000000000000000000CC, 0000000000000000000000CD, 0000000000000000000000CE); path = AppMixer; sourceTree = "<group>"; };
+000000000000000000000004 = {isa = PBXGroup; children = (000000000000000000000006); name = Products; sourceTree = "<group>"; };
+000000000000000000000006 = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppMixer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+000000000000000000000005 = {isa = PBXNativeTarget; buildConfigurationList = 00000000000000000000000B; buildPhases = (000000000000000000000007, 000000000000000000000008, 000000000000000000000009); buildRules = (); dependencies = (); name = AppMixer; productName = AppMixer; productReference = 000000000000000000000006; productType = "com.apple.product-type.application"; };
+000000000000000000000007 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (000000000000000000000068, 000000000000000000000064, 000000000000000000000065, 000000000000000000000066, 000000000000000000000067); runOnlyForDeploymentPostprocessing = 0; };
+000000000000000000000008 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+000000000000000000000009 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+00000000000000000000000A = {isa = XCConfigurationList; buildConfigurations = (00000000000000000000000C, 00000000000000000000000D); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+00000000000000000000000B = {isa = XCConfigurationList; buildConfigurations = (00000000000000000000000E, 00000000000000000000000F); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+00000000000000000000000C = {isa = XCBuildConfiguration; buildSettings = {CLANG_ENABLE_MODULES = YES; CLANG_ENABLE_OBJC_ARC = YES; MACOSX_DEPLOYMENT_TARGET = 14.2; SDKROOT = macosx; SWIFT_VERSION = 5.0; GCC_C_LANGUAGE_STANDARD = gnu11; }; name = Debug; };
+00000000000000000000000D = {isa = XCBuildConfiguration; buildSettings = {CLANG_ENABLE_MODULES = YES; CLANG_ENABLE_OBJC_ARC = YES; MACOSX_DEPLOYMENT_TARGET = 14.2; SDKROOT = macosx; SWIFT_VERSION = 5.0; GCC_C_LANGUAGE_STANDARD = gnu11; }; name = Release; };
+00000000000000000000000E = {isa = XCBuildConfiguration; buildSettings = {PRODUCT_NAME = AppMixer; PRODUCT_BUNDLE_IDENTIFIER = local.appmixer.native; INFOPLIST_FILE = AppMixer/Info.plist; SWIFT_OBJC_BRIDGING_HEADER = AppMixer/BridgingHeader.h; CODE_SIGN_STYLE = Manual; CODE_SIGN_IDENTITY = "-"; ENABLE_APP_SANDBOX = NO; ENABLE_HARDENED_RUNTIME = YES; SWIFT_OPTIMIZATION_LEVEL = -Onone; }; name = Debug; };
+00000000000000000000000F = {isa = XCBuildConfiguration; buildSettings = {PRODUCT_NAME = AppMixer; PRODUCT_BUNDLE_IDENTIFIER = local.appmixer.native; INFOPLIST_FILE = AppMixer/Info.plist; SWIFT_OBJC_BRIDGING_HEADER = AppMixer/BridgingHeader.h; CODE_SIGN_STYLE = Manual; CODE_SIGN_IDENTITY = "-"; ENABLE_APP_SANDBOX = NO; ENABLE_HARDENED_RUNTIME = YES; SWIFT_OPTIMIZATION_LEVEL = -O; }; name = Release; };
+};
+rootObject = 000000000000000000000001;
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+<key>CFBundleName</key><string>AppMixer</string>
+<key>CFBundleDisplayName</key><string>AppMixer</string>
+<key>CFBundleIdentifier</key><string>local.appmixer.native</string>
+<key>CFBundleExecutable</key><string>AppMixer</string>
+<key>CFBundlePackageType</key><string>APPL</string>
+<key>CFBundleShortVersionString</key><string>0.4.2</string>
+<key>CFBundleVersion</key><string>7</string>
+<key>LSMinimumSystemVersion</key><string>14.2</string>
+<key>LSUIElement</key><true/>
+<key>NSHighResolutionCapable</key><true/>
+<key>NSAudioCaptureUsageDescription</key><string>AppMixer ใช้เสียงของแอปเพื่อปรับระดับเสียงและ mute โดยไม่บันทึกหรืออัปโหลดเสียง / AppMixer accesses app audio for volume control and mute. Audio stays on this Mac and is not saved or uploaded.</string>
+</dict></plist>
