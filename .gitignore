@@ -19,3 +19,6 @@ xcuserdata/
 !.env.example
 *.p12
 *.mobileprovision
+
+# Release packages
+dist/

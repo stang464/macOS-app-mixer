@@ -1,0 +1,88 @@
+name: Build macOS app
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish this version to GitHub Releases
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: appmixer-build-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Universal macOS app
+    runs-on: macos-15
+    timeout-minutes: 25
+    permissions:
+      contents: write
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Check release version
+        id: version
+        env:
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          app_version=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' AppMixer/Info.plist)
+          release_tag="v${app_version}"
+          if [[ "$REF_TYPE" == tag && "$REF_NAME" != "$release_tag" ]]; then
+            printf 'Tag %s does not match app version %s\n' "$REF_NAME" "$app_version" >&2
+            exit 1
+          fi
+          if git rev-parse --verify "refs/tags/${release_tag}" >/dev/null 2>&1; then
+            if [[ "$(git rev-parse "${release_tag}^{commit}")" != "$GITHUB_SHA" ]]; then
+              if [[ "$REF_TYPE" == tag || '${{ inputs.publish }}' == true ]]; then
+                printf 'Release tag already points to another commit. Increase the app version first.\n' >&2
+                exit 1
+              fi
+            fi
+          fi
+          printf 'tag=%s\n' "$release_tag" >> "$GITHUB_OUTPUT"
+
+      - name: Test audio processing, app identities, and languages
+        run: ./scripts/test.sh
+
+      - name: Build and verify Apple Silicon and Intel app
+        run: ./scripts/build-release.sh
+
+      - name: Store downloadable build
+        uses: actions/upload-artifact@v7
+        with:
+          name: AppMixer-${{ steps.version.outputs.tag }}-macOS-universal
+          path: |
+            dist/*.zip
+            dist/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish GitHub Release
+        if: github.ref_type == 'tag' || (github.event_name == 'workflow_dispatch' && inputs.publish)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          # Never replace an existing published binary during a workflow rerun.
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            printf 'Release %s already exists; leaving published assets unchanged.\n' "$RELEASE_TAG"
+            exit 0
+          fi
+          gh release create "$RELEASE_TAG" dist/*.zip dist/SHA256SUMS.txt \
+            --target "$GITHUB_SHA" \
+            --title "AppMixer ${RELEASE_TAG}" \
+            --notes-file RELEASE_NOTES.md

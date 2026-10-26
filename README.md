@@ -4,6 +4,16 @@
 
 รุ่น 0.4.2 ซ่อน WebThumbnailExtension และตัวช่วยสร้างภาพตัวอย่างของ Quick Look จากรายการแอป รวมถึงรายการที่เคยตั้งระดับเสียงไว้แล้ว โดยตรวจชื่อ process, bundle ID และตำแหน่งส่วนขยายของระบบ ไม่ซ่อน WebKit ทุกตัว เพื่อให้เสียงของ Safari และแอปอื่นยังแสดงตามเดิม
 
+## ดาวน์โหลดแอป / Download
+
+ดาวน์โหลด ZIP จาก [GitHub Releases](https://github.com/stang464/macOS-app-mixer/releases/latest) เลือกไฟล์ **AppMixer-v…-macOS-universal.zip** แล้วแตกไฟล์และลาก AppMixer.app ไปที่ Applications ไม่ต้องติดตั้ง Xcode ไฟล์เดียวมีทั้ง Apple Silicon และ Intel และต้องใช้ macOS 14.2 ขึ้นไป
+
+Download **AppMixer-v…-macOS-universal.zip** from [Releases](https://github.com/stang464/macOS-app-mixer/releases/latest), extract it, and move AppMixer.app to Applications. Requires macOS 14.2 or later; no Xcode needed. The ZIP contains both Apple Silicon and Intel builds.
+
+แอปยังไม่ผ่านการ notarize จาก Apple จึงอาจมีคำเตือนตอนเปิดครั้งแรก หากเชื่อถือไฟล์ ให้ใช้ตัวเลือก Open Anyway ที่ macOS มีให้ตาม [คำแนะนำของ Apple](https://support.apple.com/en-us/102445) ไม่ต้องปิด Gatekeeper ตัวแอปยังเป็นรุ่นทดลอง และยังไม่ได้ทดสอบบนเครื่อง Intel จริง
+
+The app is ad-hoc signed, not Apple-notarized. macOS may block the first launch; follow [Apple’s instructions](https://support.apple.com/en-us/102445) only if you trust this download. Intel binaries are built and verified, but have not been tested on Intel hardware.
+
 ## เริ่มใช้งาน
 
 1. เปิด `AppMixer.app` ที่ให้มาคู่กับโฟลเดอร์นี้ แล้วคลิกไอคอนรูปตัวปรับเสียงบนแถบเมนูด้านบน
@@ -100,3 +110,28 @@ xcrun clang -std=c11 -fsanitize=address,undefined -g Tests/AudioKernelTests.c Ap
 ```
 
 อ้างอิง API: [Apple — Capturing system audio with Core Audio taps](https://developer.apple.com/documentation/CoreAudio/capturing-system-audio-with-core-audio-taps)
+
+## สร้างไฟล์ดาวน์โหลดบน GitHub / Automated builds
+
+Workflow **Build macOS app** ทำงานเมื่อ push ไป `main` โดยรันชุดทดสอบ บิลด์แอป Universal ตรวจว่ามีทั้ง `arm64` และ `x86_64` ตรวจลายเซ็น แล้วแนบ ZIP กับ checksum ให้ดาวน์โหลดจาก Artifacts ของรอบนั้น ไฟล์ Artifacts เก็บไว้ 30 วัน
+
+เผยแพร่ไฟล์ให้คนทั่วไปโหลดได้จากหน้า Releases:
+
+1. เปิด Actions → Build macOS app → Run workflow บน branch `main`
+2. เปิดตัวเลือก **Publish this version to GitHub Releases** แล้วกด Run workflow
+3. เมื่อเสร็จ จะมี Release `v` ตามเวอร์ชันใน `AppMixer/Info.plist` พร้อม ZIP และ `SHA256SUMS.txt`
+
+อีกวิธีคือ push tag ที่ตรงกับเวอร์ชัน เช่น `v0.4.2` ระบบจะ build และสร้าง Release อัตโนมัติ หากจะออกรุ่นใหม่ ให้เพิ่ม `CFBundleShortVersionString` และ `CFBundleVersion` ใน Info.plist ก่อน ระบบจะไม่เขียนทับไฟล์ Release ที่เผยแพร่ไปแล้ว และจะปฏิเสธ tag ที่ชี้ไปคนละ commit กับรุ่นที่กำลังเผยแพร่
+
+The workflow tests and builds every push to `main`. To publish a downloadable release, open **Actions → Build macOS app → Run workflow**, enable **Publish this version to GitHub Releases**, and run it. Alternatively, push a version tag matching Info.plist. Published release files are never overwritten on reruns.
+
+GitHub Actions ต้องเปิดใช้งานใน repository และอนุญาตให้ workflow เขียน release ได้ ไม่ต้องเพิ่ม personal access token หรือ certificate สำหรับรุ่น ad-hoc นี้ หากต้องการแจกโดยลดคำเตือนจาก Gatekeeper ต้องตั้งค่า Developer ID signing และ notarization เพิ่มเติม
+
+บิลด์ ZIP Universal บนเครื่องเอง:
+
+```sh
+./scripts/test.sh
+./scripts/build-release.sh
+```
+
+ไฟล์ ZIP และ checksum อยู่ใน `dist/` ซึ่งไม่ถูกเก็บใน Git ไฟล์แอปที่บิลด์อยู่ใน `.build/Release/Build/Products/Release/AppMixer.app`
